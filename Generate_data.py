@@ -30,7 +30,7 @@ for n in range(0, len(X)):
 plt.scatter(X[:, 0], X[:, 1], marker = 'o', c = color)
 plt.show()
 
-np.save('class1.npy', X1)
-np.save('class2.npy', X2)
-io.savemat('class1.mat', {'class1': X1})
-io.savemat('class2.mat', {'class2': X2})
+# np.save('class1.npy', X1)
+# np.save('class2.npy', X2)
+# io.savemat('class1.mat', {'class1': X1})
+# io.savemat('class2.mat', {'class2': X2})

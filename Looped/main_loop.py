@@ -26,6 +26,7 @@ def relu(x):
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
+# Forward pass function
 def forward_pass(X, W1, b1, W2, b2):
     # Hidden layer computation
     z1 = X @ W1 + b1
@@ -37,17 +38,28 @@ def forward_pass(X, W1, b1, W2, b2):
     
     return a2
 
-# Initialize weights and biases
-W1 = np.random.randn(2, 3)  # Weights between input and hidden layer
-b1 = np.random.randn(3)     # Biases for hidden layer
-W2 = np.random.randn(3, 1)  # Weights between hidden and output layer
-b2 = np.random.randn(1)     # Bias for output layer
+# Find the best weights and biases over 50 runs
+best_accuracy = 0
+best_W1, best_b1, best_W2, best_b2 = None, None, None, None
 
-# Compute predictions and classification accuracy
-predictions = forward_pass(X, W1, b1, W2, b2)
-predicted_labels = (predictions > 0.5).astype(int).flatten()
-accuracy = np.mean(predicted_labels == T)
-print(f'Initial Classification Accuracy: {accuracy * 100:.2f}%')
+for i in range(300):
+    # Initialize weights and biases
+    W1 = np.random.randn(2, 3)  # Weights between input and hidden layer
+    b1 = np.random.randn(3)     # Biases for hidden layer
+    W2 = np.random.randn(3, 1)  # Weights between hidden and output layer
+    b2 = np.random.randn(1)     # Bias for output layer
+
+    # Compute predictions and classification accuracy
+    predictions = forward_pass(X, W1, b1, W2, b2)
+    predicted_labels = (predictions > 0.5).astype(int).flatten()
+    accuracy = np.mean(predicted_labels == T)
+
+    # Check if the current accuracy is the best
+    if accuracy > best_accuracy and accuracy<0.65:
+        best_accuracy = accuracy
+        best_W1, best_b1, best_W2, best_b2 = W1, b1, W2, b2
+
+print(f'Best Classification Accuracy: {best_accuracy * 100:.2f}%')
 
 # Plot the decision boundary for the best MLP
 def plot_decision_boundary(X, T, forward_pass, W1, b1, W2, b2):
@@ -61,8 +73,8 @@ def plot_decision_boundary(X, T, forward_pass, W1, b1, W2, b2):
     plt.scatter(X[:, 0], X[:, 1], c=T, cmap='bwr', edgecolor='k')
     plt.xlabel('Feature 1')
     plt.ylabel('Feature 2')
-    plt.title(f'Decision Boundary of Initial MLP with Accuracy = {accuracy*100}%')
+    plt.title(f'Decision Boundary for the Inital MLP with Accuracy = {best_accuracy*100}%')
     plt.show()
 
-# Plot the decision boundary of the MLP
-plot_decision_boundary(X, T, forward_pass, W1, b1, W2, b2)
+# Plot the decision boundary of the best MLP
+plot_decision_boundary(X, T, forward_pass, best_W1, best_b1, best_W2, best_b2)
