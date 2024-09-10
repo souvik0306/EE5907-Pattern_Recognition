@@ -20,12 +20,6 @@ plt.scatter(X[:, 0], X[:, 1], marker='o', c=color)
 # plt.show()
 
 # Activation functions and their derivatives
-def relu(x):
-    return np.maximum(0, x)
-
-def relu_derivative(x):
-    return (x > 0).astype(float)
-
 def tanh(x):
     return np.tanh(x)
 
