@@ -14,10 +14,10 @@ c1 = ['red'] * len(X1)  # Class 1
 c2 = ['blue'] * len(X2) # Class 2
 color = np.concatenate((c1, c2))
 plt.scatter(X[:, 0], X[:, 1], marker='o', c=color)
-# plt.xlabel('Feature 1')
-# plt.ylabel('Feature 2')
-# plt.title('Scatter Plot of Loaded Binary Class Data')
-# plt.show()
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.title('Scatter Plot of Loaded Binary Class Data')
+plt.show()
 
 # Define activation functions
 def relu(x):
