@@ -28,7 +28,7 @@ np.random.seed(42)  # For reproducibility
 x_min, x_max = X[:, 0].min(), X[:, 0].max()
 y_min, y_max = X[:, 1].min(), X[:, 1].max()
 
-centers = np.random.rand(6, 2) * [x_max - x_min, y_max - y_min] + [x_min, y_min]
+centers = np.random.rand(3, 2) * [x_max - x_min, y_max - y_min] + [x_min, y_min]
 
 # Plot the data with RBF centers
 plt.scatter(X[:, 0], X[:, 1], marker='o', c=color)

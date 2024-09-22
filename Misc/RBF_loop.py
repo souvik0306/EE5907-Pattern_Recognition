@@ -40,6 +40,9 @@ best_W, best_centers = None, None
 accuracies = []
 
 for epoch in range(epochs):
+    import random
+    seed = random.randint(0, 2**32 - 1)
+    np.random.seed(seed)
     # Randomly set RBF centers within the range of the data
     x_min, x_max = X[:, 0].min(), X[:, 0].max()
     y_min, y_max = X[:, 1].min(), X[:, 1].max()
@@ -57,9 +60,10 @@ for epoch in range(epochs):
     accuracy = np.mean(predicted_labels == T)
 
     # Track the best weights and centers
-    if accuracy > best_accuracy:
+    if accuracy > best_accuracy and accuracy==0.8:
         best_accuracy = accuracy
         best_W, best_centers = W, centers
+        best_seed = seed  # Store the seed for the best accuracy
 
     accuracies.append(accuracy)
 
@@ -69,6 +73,8 @@ for epoch in range(epochs):
         print(f'Epoch {epoch + 1}, Best Accuracy: {best_accuracy * 100:.2f}%, Mean Accuracy (last {track_interval}): {mean_accuracy * 100:.2f}%')
 
 print(f'Final Best Classification Accuracy after {epochs} epochs: {best_accuracy * 100:.2f}%')
+print(f'Seed for the best epoch: {best_seed}')
+
 
 # Plot the decision boundary of the best RBF network
 def plot_decision_boundary_rbf(X, T, centers, W, sigma=1):
