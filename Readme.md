@@ -1,56 +1,75 @@
 # EE5907 Pattern Recognition Continuous Assessment 1
 
 ## Overview
-This report explores the implementation of two classification techniques from scratch: a **Multi-Layer Perceptron (MLP)** using backpropagation and **Radial Basis Function (RBF) Networks** with randomly selected centers. Both methods are applied to a binary classification problem, and their performances are compared in terms of accuracy, decision boundaries, and generalization capabilities.
+This report explores the implementation of two classification techniques from scratch: a **Multi-Layer Perceptron (MLP)** using backpropagation and **Radial Basis Function (RBF) Networks** with randomly selected centers. Both methods are applied to a binary classification problem, and their performances are compared.
 
 ## Contents
 
 ### Part 1: Classification with Multi-Layer Perceptron (MLP)
-- **Data Generation and Visualization:** 
-  - Binary class data was generated and visualized as a scatter plot, distinguishing Class 1 and Class 2.
-  
-- **MLP Architecture:**
-  - The MLP consists of 2 input neurons, 3 hidden neurons (with ReLU activation), and 1 output neuron (with Sigmoid activation). 
-  - Initial random weights resulted in a starting classification accuracy of around **63%**.
-
-- **Backpropagation and Training:**
-  - **Loss Function:** Binary Cross-Entropy was used to guide the backpropagation process.
-  - **Training:** The weights and biases were updated iteratively using gradient descent over multiple epochs. 
-  - **Final Accuracy:** After training, the accuracy improved to **84%**, highlighting the importance of backpropagation in refining model performance.
-
-- **Decision Boundary Visualization:**
-  - Decision boundaries before and after backpropagation were plotted, showcasing how the updated weights resulted in better separation between the classes.
-  - This visually demonstrates the improvement in classification accuracy after training.
-
-- **Comparison:** 
-  - A table summarizes the performance of the MLP before and after backpropagation, showing how the model adapts to the data through weight and bias updates.
+- **Data Generation and Visualization:** Binary class data was generated and visualized.
+- **MLP Architecture:** The MLP consists of 2 input neurons, 3 hidden neurons (ReLU), and 1 output neuron (Sigmoid). Initial accuracy: **63%**.
+- **Backpropagation and Training:** Binary Cross-Entropy loss, gradient descent over multiple epochs. Final accuracy: **84%**.
+- **Decision Boundary Visualization:** Plots before and after backpropagation show improved separation.
+- **Comparison:** Performance before and after backpropagation.
 
 ### Part 2: Classification with Radial Basis Function (RBF) Networks
-- **RBF with 3 Neurons:**
-  - An RBF network was implemented using 3 randomly selected centers (neurons). 
-  - **Gaussian RBF function:** The activation function was based on the distance between the input points and the centers, with sigma controlling the spread.
-  - **Least Squares Estimation:** Weights were calculated using the pseudo-inverse of the RBF matrix.
-  - **Classification Accuracy:** The RBF network achieved an accuracy of **71%**.
-
-- **RBF with 6 Neurons:**
-  - The number of neurons (RBF centers) was increased to 6 to provide more flexibility in modeling the data.
-  - **Improved Accuracy:** With 6 centers, the accuracy increased to **80%**, demonstrating the benefit of additional hidden neurons in capturing more complex patterns in the data.
-
-- **Decision Boundary Visualization:**
-  - The decision boundaries for both the 3-neuron and 6-neuron networks were plotted, showing improved classification with additional neurons.
-
-- **Comparison of 3 vs. 6 Neurons:**
-  - A detailed comparison between 3 and 6 neurons highlighted the trade-off between model complexity and generalization. While more neurons allowed for more precise decision boundaries, care was taken to avoid overfitting.
+- **RBF with 3 Neurons:** 3 randomly selected centers, Gaussian RBF function, Least Squares Estimation. Accuracy: **71%**.
+- **RBF with 6 Neurons:** Increased to 6 centers. Improved accuracy: **80%**.
+- **Decision Boundary Visualization:** Plots for 3 and 6 neurons.
+- **Comparison of 3 vs. 6 Neurons:** Trade-off between complexity and generalization.
 
 ### Conclusions
-- **MLP vs RBF:** 
-  - The MLP, after training with backpropagation, outperformed the RBF network, achieving an accuracy of **84%** compared to **80%** with 6 RBF centers.
-  
-- **Effect of Neurons in RBF:** 
-  - The RBF network’s performance improved as more centers were added, but a balance is needed to prevent overfitting.
-  
-- **Visual Insights:** 
-  - The decision boundaries and accuracy comparisons provide visual evidence of how both models separate the two classes and how they adapt with training and increased complexity.
+- **MLP vs RBF:** MLP (84%) outperformed RBF (80% with 6 centers).
+- **Effect of Neurons in RBF:** Performance improved with more centers, but balance needed to avoid overfitting.
+- **Visual Insights:** Decision boundaries and accuracy comparisons.
 
 ### Final Thoughts
-This report demonstrates how neural networks can be implemented from scratch and tuned to improve classification performance. The comparison between MLPs and RBF networks provides insights into the strengths and limitations of each approach in handling nonlinear separations in data.
+This report demonstrates neural networks implemented from scratch and tuned for improved classification. The comparison provides insights into the strengths and limitations of MLPs and RBF networks.
+
+## How to Run the Scripts
+
+### Prerequisites
+Ensure you have Python installed along with the necessary libraries:
+- `numpy`
+- `matplotlib`
+- `scikit-learn`
+
+Install the required libraries using:
+```sh
+pip install numpy matplotlib scikit-learn
+```
+### Dataset
+- `class1.npy` and `class2.npy` are dataset arrays. You can generate your own using `generate_data.py`.
+
+### Running the Scripts
+1. **Data Generation and Visualization:**
+  - Script: `view_data.py`
+  - Command: 
+    ```sh
+    python view_data.py
+    ```
+
+2. **Multi-Layer Perceptron (MLP):**
+  - Script: `MLP_random.py`
+  - Command: 
+    ```sh
+    python MLP_random.py
+    ```
+
+3. **Backpropagation Training:**
+  - Script under `Back_Prop/`: `grad_loop_final.py`
+  - Command: 
+    ```sh
+    python grad_loop.py
+    ```
+
+4. **Radial Basis Function (RBF) Networks:**
+  - Script under `RBF/`: `RBF_3.py` or `RBF_6.py`
+  - Command: 
+    ```sh
+    python RBF_3.py
+    ```
+    or
+    ```sh
+    python RBF_6.py
+    ```
