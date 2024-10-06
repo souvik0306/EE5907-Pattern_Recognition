@@ -1,4 +1,4 @@
-# EE5907 Pattern Recognition Continuous Assessment 1
+# EE5907 Pattern Recognition Continuous Assessment 1 - NUS
 
 ## Overview
 
@@ -85,6 +85,7 @@ pip install numpy matplotlib
   python RBF_3.py
   ```
   or
+
   ```sh
   python RBF_6.py
   ```
