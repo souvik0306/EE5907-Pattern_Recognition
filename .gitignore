@@ -1,4 +1,5 @@
 *.DS_Store
-CA2/*
+CA2/PIE
 version.py
 CA2/Selfie PR
+*ipynb
