@@ -188,7 +188,7 @@ def pca_classification(train_images, train_labels, test_images, test_labels, dim
 
 # Main execution
 if __name__ == "__main__":
-    seed = 8
+    seed = 23
     cmu_data_folder = "CA2/PIE"
     selfie_folder = "CA2/PIE/Selfie"
     train_images, train_labels, test_images, test_labels = load_data(
