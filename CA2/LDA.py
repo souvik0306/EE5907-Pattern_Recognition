@@ -141,7 +141,7 @@ def lda_classification(train_images, train_labels, test_images, test_labels, dim
     return results
 
 def main():
-    seed = 42
+    seed = 23
     cmu_data_folder = "CA2/PIE"
     selfie_folder = "CA2/PIE/Selfie"
     train_images, train_labels, test_images, test_labels = load_data(cmu_data_folder, selfie_folder, random_seed=seed)
