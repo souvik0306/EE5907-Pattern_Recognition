@@ -5,7 +5,10 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 import cv2
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
+# Load and preprocess dataset
 def load_images_from_folder(folder_path, img_size=(32, 32)):
     images = []
     for img_file in os.listdir(folder_path):
@@ -34,7 +37,7 @@ def load_cmu_pie_data(cmu_data_folder):
     return train_images, train_labels, test_images, test_labels
 
 def apply_pca(data_train, data_test, n_components):
-    pca = PCA(n_components=n_components)
+    pca = PCA(n_components=n_components, random_state=42)
     data_train_pca = pca.fit_transform(data_train)
     data_test_pca = pca.transform(data_test)
     return data_train_pca, data_test_pca
@@ -42,17 +45,38 @@ def apply_pca(data_train, data_test, n_components):
 def svm_classification(data_train, labels_train, data_test, labels_test, C_values):
     results = {}
     for C in C_values:
-        svm = SVC(C=C, kernel='linear')
+        svm = SVC(C=C, kernel='linear', random_state=42)
         svm.fit(data_train, labels_train)
         predictions = svm.predict(data_test)
         accuracy = accuracy_score(labels_test, predictions)
         results[C] = accuracy
     return results
 
+def plot_results(results):
+    plt.figure(figsize=(10, 6))
+    for key, res in results.items():
+        C_values = list(res.keys())
+        accuracies = list(res.values())
+        plt.plot(C_values, accuracies, marker='o', label=key)
+    plt.xscale("log")  # Use log scale for C values
+    plt.xlabel('C values (log scale)')
+    plt.ylabel('Accuracy')
+    plt.legend()
+    plt.title('SVM Classification Results')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.show()
+
 def main():
     cmu_data_folder = 'CA2/PIE'  # Update with your actual path
     train_images, train_labels, test_images, test_labels = load_cmu_pie_data(cmu_data_folder)
 
+    # Normalize the data
+    scaler = StandardScaler()
+    train_images = scaler.fit_transform(train_images)
+    test_images = scaler.transform(test_images)
+
+    np.random.seed(42)
+    
     C_values = [0.01, 0.1, 1]
     pca_dimensions = [80, 200]
     results = {}
@@ -77,5 +101,8 @@ def main():
         for C, accuracy in res.items():
             print(f"  C={C}: Accuracy = {accuracy:.4f}")
 
+    return results
+
 if __name__ == "__main__":
-    main()
+    results = main()
+    plot_results(results)
