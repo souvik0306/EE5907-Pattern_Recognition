@@ -8,10 +8,14 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 
 # Load and preprocess dataset
-def load_images_from_folder(folder_path, img_size=(32, 32)):
+def load_images_from_folder(folder_path, img_size=(32, 32), max_folders=25):
+    """
+    Loads images from the first 'max_folders' folders in the specified directory.
+    """
     images, labels = [], []
     label = 0
-    for subject_folder in os.listdir(folder_path):
+    subject_folders = sorted(os.listdir(folder_path))[:max_folders]  # Take only the first 'max_folders'
+    for subject_folder in subject_folders:
         subject_path = os.path.join(folder_path, subject_folder)
         if os.path.isdir(subject_path):
             for img_file in os.listdir(subject_path):
@@ -25,6 +29,9 @@ def load_images_from_folder(folder_path, img_size=(32, 32)):
     return np.array(images), np.array(labels)
 
 def prepare_selfie_images(selfie_folder, img_size=(32, 32)):
+    """
+    Loads all images from the specified selfie folder.
+    """
     selfie_images = []
     for img_file in os.listdir(selfie_folder):
         img_path = os.path.join(selfie_folder, img_file)
@@ -34,8 +41,12 @@ def prepare_selfie_images(selfie_folder, img_size=(32, 32)):
             selfie_images.append(img.flatten())
     return np.array(selfie_images)
 
-def load_data(cmu_data_folder, selfie_folder, random_seed=42):
-    images, labels = load_images_from_folder(cmu_data_folder)
+def load_data(cmu_data_folder, selfie_folder, max_folders=25, random_seed=42):
+    """
+    Loads data from the CMU PIE dataset and selfie images.
+    Only the first 'max_folders' folders from CMU PIE are loaded.
+    """
+    images, labels = load_images_from_folder(cmu_data_folder, max_folders=max_folders)
     selfie_images = prepare_selfie_images(selfie_folder)
 
     train_images, train_labels, test_images, test_labels = [], [], [], []
@@ -81,17 +92,23 @@ def apply_pca(data, n_components, random_seed=42):
     return transformed_data, pca
 
 def visualize_pca_2d(data, labels, highlighted_idx=None):
+    """
+    Visualizes 2D PCA data with different colors and shapes for each class.
+    Highlights selfie images in red dots.
+    """
     plt.figure(figsize=(8, 6))
-    for unique_label in np.unique(labels):
+    unique_labels = np.unique(labels)
+    markers = ['o', 's', '^', 'P', '*', 'X', 'D']  # Marker styles for different classes
+    colors = plt.cm.tab20.colors  # Use a color palette
+
+    for i, unique_label in enumerate(unique_labels):
         idx = labels == unique_label
-        plt.scatter(data[idx, 0], data[idx, 1], label=f"Class {unique_label}")
-    if highlighted_idx is not None:
-        plt.scatter(
-            data[highlighted_idx, 0],
-            data[highlighted_idx, 1],
-            color="red",
-            label="Selfie",
-        )
+        if unique_label == max(labels):  # Selfie class (last label)
+            plt.scatter(data[idx, 0], data[idx, 1], color='red', marker='o', label='Selfie', edgecolor='k')
+        else:
+            marker = markers[i % len(markers)]  # Cycle through marker styles
+            plt.scatter(data[idx, 0], data[idx, 1], color=colors[i % len(colors)], marker=marker, label=f"Class {unique_label}")
+
     plt.xlabel("Principal Component 1")
     plt.ylabel("Principal Component 2")
     plt.legend()
@@ -99,19 +116,27 @@ def visualize_pca_2d(data, labels, highlighted_idx=None):
     plt.show()
 
 def visualize_pca_3d(data, labels, highlighted_idx=None):
+    """
+    Visualizes 3D PCA data with different colors and shapes for each class.
+    Highlights selfie images in red dots.
+    """
     fig = plt.figure(figsize=(8, 6))
     ax = fig.add_subplot(111, projection="3d")
-    for unique_label in np.unique(labels):
+    unique_labels = np.unique(labels)
+    markers = ['o', 's', '^', 'P', '*', 'X', 'D']  # Marker styles for different classes
+    colors = plt.cm.tab20.colors  # Use a color palette
+
+    for i, unique_label in enumerate(unique_labels):
         idx = labels == unique_label
-        ax.scatter(data[idx, 0], data[idx, 1], data[idx, 2], label=f"Class {unique_label}")
-    if highlighted_idx is not None:
-        ax.scatter(
-            data[highlighted_idx, 0],
-            data[highlighted_idx, 1],
-            data[highlighted_idx, 2],
-            color="red",
-            label="Selfie",
-        )
+        if unique_label == max(labels):  # Selfie class (last label)
+            ax.scatter(data[idx, 0], data[idx, 1], data[idx, 2], color='red', marker='o', label='Selfie', edgecolor='k')
+        else:
+            marker = markers[i % len(markers)]  # Cycle through marker styles
+            ax.scatter(
+                data[idx, 0], data[idx, 1], data[idx, 2],
+                color=colors[i % len(colors)], marker=marker, label=f"Class {unique_label}"
+            )
+
     ax.set_xlabel("Principal Component 1")
     ax.set_ylabel("Principal Component 2")
     ax.set_zlabel("Principal Component 3")
@@ -176,9 +201,9 @@ if __name__ == "__main__":
     )
     for n_components, accuracy_dict in results.items():
         print(f"PCA Dimensionality {n_components}:")
-        print(f"  Overall Accuracy = {accuracy_dict['overall']:.2f}")
-        print(f"  CMU PIE Accuracy = {accuracy_dict['cmu_pie']:.2f}")
-        print(f"  Selfie Accuracy = {accuracy_dict['selfie']:.2f}")
+        print(f"  Overall Accuracy = {accuracy_dict['overall']:.4f}")
+        print(f"  CMU PIE Accuracy = {accuracy_dict['cmu_pie']:.4f}")
+        print(f"  Selfie Accuracy = {accuracy_dict['selfie']:.4f}")
 
     # Visualize PCA
     sample_indices = np.random.choice(len(train_images), 500, replace=False)
